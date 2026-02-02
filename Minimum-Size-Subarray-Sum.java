@@ -1,28 +1,30 @@
-1import java.util.Arrays;
-2
-3class Solution {
-4    public int minSubArrayLen(int target, int[] nums) {
-5        // REMOVED: Arrays.sort(nums); <-- This was the culprit!
-6        
-7        int n = nums.length;
-8        int minLen = Integer.MAX_VALUE;
-9        int sum = 0;
-10        int left = 0;
-11
-12        for (int right = 0; right < n; right++) {
-13            // 1. Expand the window by adding the current number
-14            sum += nums[right];
-15
-16            // 2. While the window meets the condition, try to shrink it
-17            while (sum >= target) {
-18                minLen = Math.min(minLen, right - left + 1);
-19                
-20                // Shrink from the left to see if we can find a smaller window
-21                sum -= nums[left];
-22                left++;
+1class Solution {
+2    public int minSubArrayLen(int target, int[] nums) {
+3        int c=Integer.MAX_VALUE;
+4        int i=0;
+5        int j=0;
+6        int sum=nums[i];
+7        while(j<nums.length && i<nums.length){
+8            if(nums[i]>=target){
+9                return 1;
+10            }
+11            else if(nums[j]>=target){
+12                return 1;
+13            }
+14            else if(sum<target){
+15                if(j+1>=nums.length){
+16                    break;
+17                }
+18                sum+=nums[++j];
+19            }
+20            if(sum>=target){
+21                c=Math.min(j-i+1,c);
+22                sum-=nums[i++];
 23            }
 24        }
-25
-26        return (minLen == Integer.MAX_VALUE) ? 0 : minLen;
-27    }
-28}
+25        if(c==Integer.MAX_VALUE){
+26            return 0;
+27        }
+28        return c;
+29    }
+30}
